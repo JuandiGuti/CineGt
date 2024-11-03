@@ -7,7 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using static System.Collections.Specialized.BitVector32;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace CineGt
@@ -345,6 +348,149 @@ namespace CineGt
                 throw new Exception(ex.Message);
             }
         }
+        public List<sessionByMovie> llenarDGsessionByMovie(string movieName)
+        {
+            List<sessionByMovie> list = new List<sessionByMovie>();
+            string query = $"SELECT MS.ID AS SessionId, MS.BeginningDate, MS.EndingDate, M.MovieName, MS.Room, (100 - MS.CompromisedSeats) AS AvailableSeats FROM MovieSession MS, Movie M WHERE SessionState = 0  AND BeginningDate > GETDATE() AND MS.Movie = M.ID AND M.MovieName = '{movieName}' ORDER BY BeginningDate ASC;";
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        conn.Open();
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            sessionByMovie sessionByMovie = new sessionByMovie();
+                            sessionByMovie.id = reader.GetInt32(0);
+                            sessionByMovie.beginningDate = reader.GetDateTime(1);
+                            sessionByMovie.endingDate = reader.GetDateTime(2);
+                            sessionByMovie.movieName = reader.GetString(3);
+                            sessionByMovie.room = reader.GetInt32(4);
+                            sessionByMovie.availableSeats = reader.GetInt32(5);
+                            list.Add(sessionByMovie);
+                        }
+                        reader.Close();
+                        conn.Close();
+                    }
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public void newClient(string name, string email, string phone, int age)
+        {
+            string query = "NewClient"; // Nombre del procedimiento almacenado
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.Add(new SqlParameter("@NAME", SqlDbType.VarChar, 50)).Value = name;
+                    cmd.Parameters.Add(new SqlParameter("@EMAIL", SqlDbType.VarChar, 50)).Value = email;
+                    cmd.Parameters.Add(new SqlParameter("@PHONE", SqlDbType.VarChar, 12)).Value = phone;
+                    cmd.Parameters.Add(new SqlParameter("@AGE", SqlDbType.Int)).Value = age;
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public int newTicketTransaction(string email, string username, int numberSeats, int idMovieSession)
+        {
+            double payment = 50 * numberSeats;
+
+            string query = "NewTicketsTransaction"; // Nombre del procedimiento almacenado
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.Add(new SqlParameter("@CLIENTEMAIL", SqlDbType.VarChar, 50)).Value = email;
+                    cmd.Parameters.Add(new SqlParameter("@APPUSER", SqlDbType.VarChar, 50)).Value = username;
+                    cmd.Parameters.Add(new SqlParameter("@PAYMENT", SqlDbType.VarChar, 12)).Value = payment;
+                    cmd.Parameters.Add(new SqlParameter("@#SEATS", SqlDbType.Int)).Value = numberSeats;
+                    cmd.Parameters.Add(new SqlParameter("@MOVIESESSIONID", SqlDbType.Int)).Value = idMovieSession;
+
+                    SqlParameter idTransaction = new SqlParameter("@IDTRANSACTION", SqlDbType.Int);
+                    idTransaction.Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add(idTransaction);
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+
+                    int idTicketTransaction = int.Parse(idTransaction.Value.ToString());
+
+                    conn.Close();
+                    return idTicketTransaction;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public void closeTicketTransaction(int idTicketTransaction, int idMovieSession)
+        {
+            string query = "CloseTicketsTransaction"; // Nombre del procedimiento almacenado
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.Add(new SqlParameter("@TICKETSTRANSACTIONID", SqlDbType.Int)).Value = idTicketTransaction;
+                    cmd.Parameters.Add(new SqlParameter("@MOVIESESSIONID", SqlDbType.Int)).Value = idMovieSession;
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public void buyTickes(string json)
+        {
+            string query = "BuyTickets"; // Nombre del procedimiento almacenado
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.Add(new SqlParameter("@json", SqlDbType.NVarChar)).Value = json;
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public class movieSession
         {
             public int id { get; set; }
@@ -369,6 +515,15 @@ namespace CineGt
             public int movieSession { get; set; }
             public string seat { get; set; }
             public int? ticketsTransaction { get; set; }
+        }
+        public class sessionByMovie
+        {
+            public int id { get; set; }
+            public DateTime beginningDate { get; set; }
+            public DateTime endingDate { get; set; }
+            public int room { get; set; }
+            public string movieName { get; set; }
+            public int availableSeats { get; set; }
         }
 
     }

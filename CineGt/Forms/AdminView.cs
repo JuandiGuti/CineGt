@@ -62,7 +62,8 @@ namespace CineGt.Forms
 
         private void linkLabel5_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-
+            buyTicketsTransaction buyTickets = new buyTicketsTransaction(Username);
+            buyTickets.ShowDialog();
         }
     }
 }

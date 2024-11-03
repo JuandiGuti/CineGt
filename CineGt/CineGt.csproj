@@ -20,6 +20,9 @@
     <Compile Update="Forms\CancelSession.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\buySeats.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\deploySeats.cs">
       <SubType>Form</SubType>
     </Compile>
