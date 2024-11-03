@@ -20,6 +20,9 @@
     <Compile Update="Forms\CancelSession.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\deploySeats.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\NewSession.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -44,6 +47,19 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="img\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="img\available.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="img\occupied.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

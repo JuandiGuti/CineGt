@@ -190,6 +190,7 @@
             linkLabel4.TabIndex = 13;
             linkLabel4.TabStop = true;
             linkLabel4.Text = "Change seat";
+            linkLabel4.LinkClicked += linkLabel4_LinkClicked;
             // 
             // label6
             // 
@@ -212,6 +213,7 @@
             linkLabel5.TabIndex = 15;
             linkLabel5.TabStop = true;
             linkLabel5.Text = "New Transaction";
+            linkLabel5.LinkClicked += linkLabel5_LinkClicked;
             // 
             // linkLabel6
             // 

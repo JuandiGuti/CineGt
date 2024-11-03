@@ -53,5 +53,16 @@ namespace CineGt.Forms
         {
 
         }
+
+        private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            ChangeSeat changeSeat = new ChangeSeat();
+            changeSeat.ShowDialog();
+        }
+
+        private void linkLabel5_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+        }
     }
 }

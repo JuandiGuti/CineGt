@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Collections.Specialized.BitVector32;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace CineGt
 {
@@ -208,6 +209,142 @@ namespace CineGt
                 throw new Exception(ex.Message);
             }
         }
+        public void cancelSession(int movieSessionId)
+        {
+            string query = "CancelMovieSession"; // Nombre del procedimiento almacenado
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.Add(new SqlParameter("@MOVIESESSIONID", SqlDbType.Int)).Value = movieSessionId;
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public List<changeSeat> llenarDGchangeSeat(string email)
+        {
+            List<changeSeat> list = new List<changeSeat>();
+            string query = "SearchSeatsByClient";
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        conn.Open();
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.Add(new SqlParameter("@EMAIL", SqlDbType.VarChar, 50)).Value = email;
+                       
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            changeSeat changeSeat = new changeSeat();
+                            changeSeat.transactionId = reader.GetFieldValue<int>(0);
+                            changeSeat.movieSessionId = reader.GetFieldValue<int>(1);
+                            changeSeat.transactionCreateDate = reader.GetFieldValue<DateTime>(2);
+                            changeSeat.transactionModificationDate = reader.IsDBNull(3) ? (DateTime?)null : reader.GetDateTime(3);
+                            changeSeat.seat = reader.GetFieldValue<string>(4);
+                            changeSeat.movieName = reader.GetFieldValue<string>(5);
+
+                            list.Add(changeSeat);
+                        }
+                        reader.Close();
+                        conn.Close();
+                    }
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public List<Seat> ObtenerAsientos(int movieSessionId)
+        {
+            List<Seat> lista = new List<Seat>();
+            string query = "SELECT * FROM SeatByMovieSession WHERE MovieSession = @MovieSession";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@MovieSession", movieSessionId);
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Seat asiento = new Seat
+                    {
+                        id = reader.GetInt32(0),
+                        available = reader.GetInt32(1),
+                        movieSession = reader.GetInt32(2),
+                        seat = reader.GetString(3),
+                        ticketsTransaction = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4)
+                    };
+                    lista.Add(asiento);
+                }
+                conn.Close();
+            }
+            return lista;
+        }
+        public void LlenarDataGridViewConAsientos(DataGridView dataGridView1, List<Seat> listaAsientos)
+        {
+            // Cargar las imágenes de los asientos
+            string disponibleImgPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "img", "available.png");
+            string ocupadoImgPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "img", "occupied.png");
+
+            Image disponibleImg = Image.FromFile(disponibleImgPath);
+            Image ocupadoImg = Image.FromFile(ocupadoImgPath);
+
+            // Recorrer la lista de asientos y actualizar el DataGridView
+            foreach (var asiento in listaAsientos)
+            {
+                int rowIndex = asiento.seat[0] - 'A'; // Convertir la letra de fila a índice
+                int colIndex = int.Parse(asiento.seat.Substring(1)) - 1; // Convertir el número de columna a índice
+
+                // Asignar la imagen y el tag según el estado de disponibilidad
+                dataGridView1[colIndex, rowIndex].Value = asiento.available == 1 ? disponibleImg : ocupadoImg;
+                dataGridView1[colIndex, rowIndex].Tag = asiento.available == 1 ? "available" : "occupied"; // Asigna el tag
+            }
+        }
+        public void cambiarAsiento(int idTicketTransaction, int idMovieSession, string actualSeat, string newSeat)
+        {
+            string query = "ChangeSeat"; // Nombre del procedimiento almacenado
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Agregar parámetros
+                    cmd.Parameters.Add(new SqlParameter("@TICKETSTRANSACTIONID", SqlDbType.Int)).Value = idTicketTransaction;
+                    cmd.Parameters.Add(new SqlParameter("@MOVIESSESIONID", SqlDbType.Int)).Value = idMovieSession;
+                    cmd.Parameters.Add(new SqlParameter("@ACTUALSEAT", SqlDbType.VarChar, 3)).Value = actualSeat;
+                    cmd.Parameters.Add(new SqlParameter("@NEWSEAT", SqlDbType.VarChar, 3)).Value = newSeat;
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         public class movieSession
         {
             public int id { get; set; }
@@ -216,5 +353,23 @@ namespace CineGt
             public int room { get; set; }
             public string movieName { get; set; }
         }
+        public class changeSeat()
+        {
+            public int transactionId {  get; set; }
+            public int movieSessionId { get; set; }
+            public DateTime transactionCreateDate { get; set; }
+            public DateTime? transactionModificationDate { get; set; }
+            public string seat { get; set; }
+            public string movieName { get; set; }
+        }
+        public class Seat
+        {
+            public int id { get; set; }
+            public int available { get; set; }
+            public int movieSession { get; set; }
+            public string seat { get; set; }
+            public int? ticketsTransaction { get; set; }
+        }
+
     }
 }

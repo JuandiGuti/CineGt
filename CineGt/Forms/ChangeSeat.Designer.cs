@@ -1,6 +1,6 @@
 ﻿namespace CineGt.Forms
 {
-    partial class CancelSession
+    partial class ChangeSeat
     {
         /// <summary>
         /// Required designer variable.
@@ -34,15 +34,19 @@
             label1 = new Label();
             pictureBox1 = new PictureBox();
             button3 = new Button();
+            dataGridView1 = new DataGridView();
             pictureBox3 = new PictureBox();
             label3 = new Label();
             pictureBox2 = new PictureBox();
-            dataGridView1 = new DataGridView();
+            textBox1 = new TextBox();
             button1 = new Button();
+            button2 = new Button();
+            label2 = new Label();
+            label4 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -52,7 +56,7 @@
             label1.Location = new Point(12, 9);
             label1.Name = "label1";
             label1.Size = new Size(196, 64);
-            label1.TabIndex = 0;
+            label1.TabIndex = 4;
             label1.Text = "Cine Gt";
             // 
             // pictureBox1
@@ -60,7 +64,7 @@
             pictureBox1.Location = new Point(12, 12);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(980, 660);
-            pictureBox1.TabIndex = 3;
+            pictureBox1.TabIndex = 5;
             pictureBox1.TabStop = false;
             // 
             // button3
@@ -70,37 +74,10 @@
             button3.Location = new Point(776, 619);
             button3.Name = "button3";
             button3.Size = new Size(200, 40);
-            button3.TabIndex = 4;
+            button3.TabIndex = 6;
             button3.Text = "Back";
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
-            // 
-            // pictureBox3
-            // 
-            pictureBox3.BackColor = Color.White;
-            pictureBox3.Location = new Point(113, 128);
-            pictureBox3.Name = "pictureBox3";
-            pictureBox3.Size = new Size(778, 5);
-            pictureBox3.TabIndex = 21;
-            pictureBox3.TabStop = false;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(113, 106);
-            label3.Name = "label3";
-            label3.Size = new Size(499, 19);
-            label3.TabIndex = 20;
-            label3.Text = "Select the movie session to cancel (only inactive ones in the future):";
-            // 
-            // pictureBox2
-            // 
-            pictureBox2.BackColor = Color.White;
-            pictureBox2.Location = new Point(23, 76);
-            pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(953, 10);
-            pictureBox2.TabIndex = 19;
-            pictureBox2.TabStop = false;
             // 
             // dataGridView1
             // 
@@ -128,7 +105,7 @@
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
             dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
             dataGridView1.GridColor = Color.White;
-            dataGridView1.Location = new Point(113, 148);
+            dataGridView1.Location = new Point(113, 166);
             dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
@@ -142,23 +119,89 @@
             dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(778, 382);
-            dataGridView1.TabIndex = 22;
+            dataGridView1.Size = new Size(778, 416);
+            dataGridView1.TabIndex = 26;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            dataGridView1.SelectionChanged += DataGridView1_SelectionChanged;
+            // 
+            // pictureBox3
+            // 
+            pictureBox3.BackColor = Color.White;
+            pictureBox3.Location = new Point(113, 145);
+            pictureBox3.Name = "pictureBox3";
+            pictureBox3.Size = new Size(778, 5);
+            pictureBox3.TabIndex = 25;
+            pictureBox3.TabStop = false;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(113, 114);
+            label3.Name = "label3";
+            label3.Size = new Size(101, 19);
+            label3.TabIndex = 24;
+            label3.Text = "Client Email:";
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.BackColor = Color.White;
+            pictureBox2.Location = new Point(23, 76);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(953, 10);
+            pictureBox2.TabIndex = 23;
+            pictureBox2.TabStop = false;
+            // 
+            // textBox1
+            // 
+            textBox1.BackColor = Color.White;
+            textBox1.ForeColor = Color.FromArgb(64, 64, 64);
+            textBox1.Location = new Point(220, 106);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(247, 27);
+            textBox1.TabIndex = 27;
             // 
             // button1
             // 
-            button1.Font = new Font("Bahnschrift", 15F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            button1.Font = new Font("Bahnschrift", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             button1.ForeColor = Color.FromArgb(64, 64, 64);
-            button1.Location = new Point(402, 556);
+            button1.Location = new Point(473, 106);
             button1.Name = "button1";
-            button1.Size = new Size(200, 40);
-            button1.TabIndex = 23;
-            button1.Text = "Cancel Session";
+            button1.Size = new Size(106, 27);
+            button1.TabIndex = 28;
+            button1.Text = "Search";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
-            // CancelSession
+            // button2
+            // 
+            button2.Font = new Font("Bahnschrift", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            button2.ForeColor = Color.FromArgb(64, 64, 64);
+            button2.Location = new Point(783, 106);
+            button2.Name = "button2";
+            button2.Size = new Size(106, 27);
+            button2.TabIndex = 30;
+            button2.Text = "Change";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(633, 113);
+            label2.Name = "label2";
+            label2.Size = new Size(126, 19);
+            label2.TabIndex = 31;
+            label2.Text = "Selected Seat: -";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(705, 113);
+            label4.Name = "label4";
+            label4.Size = new Size(0, 19);
+            label4.TabIndex = 32;
+            // 
+            // ChangeSeat
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -166,7 +209,11 @@
             BackColor = Color.FromArgb(64, 64, 64);
             ClientSize = new Size(1004, 681);
             ControlBox = false;
+            Controls.Add(label4);
+            Controls.Add(label2);
+            Controls.Add(button2);
             Controls.Add(button1);
+            Controls.Add(textBox1);
             Controls.Add(dataGridView1);
             Controls.Add(pictureBox3);
             Controls.Add(label3);
@@ -178,14 +225,14 @@
             ForeColor = Color.White;
             FormBorderStyle = FormBorderStyle.Fixed3D;
             Margin = new Padding(4);
-            Name = "CancelSession";
+            Name = "ChangeSeat";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "CancelSession";
-            Load += CancelSession_Load;
+            Text = "ChangeSeat";
+            Load += ChangeSeat_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -195,10 +242,14 @@
         private Label label1;
         private PictureBox pictureBox1;
         private Button button3;
+        private DataGridView dataGridView1;
         private PictureBox pictureBox3;
         private Label label3;
         private PictureBox pictureBox2;
-        private DataGridView dataGridView1;
+        private TextBox textBox1;
         private Button button1;
+        private Button button2;
+        private Label label2;
+        private Label label4;
     }
 }

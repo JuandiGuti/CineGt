@@ -51,7 +51,7 @@ namespace CineGt.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "New Session Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }

@@ -55,7 +55,7 @@ namespace CineGt.Forms
             }
             catch (Exception ex) 
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "New Movie Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }
