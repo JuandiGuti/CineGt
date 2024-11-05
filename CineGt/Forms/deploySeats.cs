@@ -14,10 +14,12 @@ namespace CineGt.Forms
     public partial class deploySeats : Form
     {
         DBCineGt db;
-        public deploySeats(int idTransaction, int idSession, string actualSeat)
+        int Room;
+        public deploySeats(int idTransaction, int idSession, string actualSeat, int room)
         {
             InitializeComponent();
             db = new DBCineGt();
+            Room = room;
             dataGridView1.DataSource = null;
             ConfigurarDataGridView();
             var listaAsientos = db.ObtenerAsientos(idSession);
@@ -102,7 +104,7 @@ namespace CineGt.Forms
         {
             try
             {
-                db.cambiarAsiento(int.Parse(label6.Text), int.Parse(label7.Text), label8.Text, label9.Text);
+                db.cambiarAsiento(int.Parse(label6.Text), int.Parse(label7.Text), label8.Text, label9.Text, Room);
                 MessageBox.Show($"The seat: {label8.Text} was changed for the seat: {label9.Text}.", "Seat Changed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 this.Close();
             }

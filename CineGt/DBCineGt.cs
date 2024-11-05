@@ -17,7 +17,7 @@ namespace CineGt
 {
     internal class DBCineGt
     {
-        private string connectionString = "Data Source=192.168.0.1\\SQLEXPRESS;Initial Catalog=CineGt;User=CineGtAppUser;Password=CineGtAppUser;";
+        private string connectionString = "Data Source=LOCALHOST\\SQLEXPRESS;Initial Catalog=BuenaCineGt;User=CineGtAppUser;Password=CineGtAppUser;";
         public bool Ok()
         {
             try
@@ -33,7 +33,7 @@ namespace CineGt
         }
         public void userRegister(string username, string password /*LA PASS TIENE QUE VENIR YA HASHEADA AQUI*/)
         {
-            string query = "NewUser";
+            string query = "newAppUser";
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -57,7 +57,7 @@ namespace CineGt
         }
         public (bool, int) userLogIn(string username, string password)
         {
-            string query = "UserLogin";
+            string query = "makeLogin";
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -128,7 +128,7 @@ namespace CineGt
         }
         public void newMovie(string movieName, string movieDescription, TimeSpan duration, string classification)
         {
-            string query = "NewMovie"; // Nombre del procedimiento almacenado
+            string query = "addMovie"; // Nombre del procedimiento almacenado
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -154,7 +154,7 @@ namespace CineGt
         }
         public void newSession(DateTime beginningDate, string movieName, int room, string username)
         {
-            string query = "NewMovieSession"; // Nombre del procedimiento almacenado
+            string query = "addSession"; // Nombre del procedimiento almacenado
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -185,12 +185,12 @@ namespace CineGt
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    using(SqlCommand cmd = new SqlCommand(query, conn))
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
                         conn.Open();
 
                         SqlDataReader reader = cmd.ExecuteReader();
-                     
+
                         while (reader.Read())
                         {
                             movieSession movieSession = new movieSession();
@@ -214,7 +214,7 @@ namespace CineGt
         }
         public void cancelSession(int movieSessionId)
         {
-            string query = "CancelMovieSession"; // Nombre del procedimiento almacenado
+            string query = "cancelSession"; // Nombre del procedimiento almacenado
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -237,7 +237,7 @@ namespace CineGt
         public List<changeSeat> llenarDGchangeSeat(string email)
         {
             List<changeSeat> list = new List<changeSeat>();
-            string query = "SearchSeatsByClient";
+            string query = "ByClientSearchSeats";
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -248,7 +248,7 @@ namespace CineGt
                         cmd.CommandType = CommandType.StoredProcedure;
 
                         cmd.Parameters.Add(new SqlParameter("@EMAIL", SqlDbType.VarChar, 50)).Value = email;
-                       
+
                         SqlDataReader reader = cmd.ExecuteReader();
 
                         while (reader.Read())
@@ -260,7 +260,7 @@ namespace CineGt
                             changeSeat.transactionModificationDate = reader.IsDBNull(3) ? (DateTime?)null : reader.GetDateTime(3);
                             changeSeat.seat = reader.GetFieldValue<string>(4);
                             changeSeat.movieName = reader.GetFieldValue<string>(5);
-
+                            changeSeat.idRoom = reader.GetFieldValue<int>(6);
                             list.Add(changeSeat);
                         }
                         reader.Close();
@@ -277,7 +277,11 @@ namespace CineGt
         public List<Seat> ObtenerAsientos(int movieSessionId)
         {
             List<Seat> lista = new List<Seat>();
-            string query = "SELECT * FROM SeatByMovieSession WHERE MovieSession = @MovieSession";
+            string query = @"
+        SELECT sbms.ID, sbms.Available, sbms.MovieSession, s.seat, sbms.TicketsTransaction
+        FROM SeatByMovieSession sbms
+        INNER JOIN Seat s ON sbms.Seat = s.ID
+        WHERE sbms.MovieSession = @MovieSession";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -293,7 +297,7 @@ namespace CineGt
                         id = reader.GetInt32(0),
                         available = reader.GetInt32(1),
                         movieSession = reader.GetInt32(2),
-                        seat = reader.GetString(3),
+                        seat = reader.GetString(3),  // Obtenemos el nombre del asiento como string
                         ticketsTransaction = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4)
                     };
                     lista.Add(asiento);
@@ -322,9 +326,9 @@ namespace CineGt
                 dataGridView1[colIndex, rowIndex].Tag = asiento.available == 1 ? "available" : "occupied"; // Asigna el tag
             }
         }
-        public void cambiarAsiento(int idTicketTransaction, int idMovieSession, string actualSeat, string newSeat)
+        public void cambiarAsiento(int idTicketTransaction, int idMovieSession, string actualSeat, string newSeat, int room)
         {
-            string query = "ChangeSeat"; // Nombre del procedimiento almacenado
+            string query = "changeSeat"; // Nombre del procedimiento almacenado
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -337,6 +341,7 @@ namespace CineGt
                     cmd.Parameters.Add(new SqlParameter("@MOVIESSESIONID", SqlDbType.Int)).Value = idMovieSession;
                     cmd.Parameters.Add(new SqlParameter("@ACTUALSEAT", SqlDbType.VarChar, 3)).Value = actualSeat;
                     cmd.Parameters.Add(new SqlParameter("@NEWSEAT", SqlDbType.VarChar, 3)).Value = newSeat;
+                    cmd.Parameters.Add(new SqlParameter("@ROOM", SqlDbType.VarChar, 3)).Value = room;
 
                     conn.Open();
                     cmd.ExecuteNonQuery();
@@ -386,7 +391,7 @@ namespace CineGt
         }
         public void newClient(string name, string email, string phone, int age)
         {
-            string query = "NewClient"; // Nombre del procedimiento almacenado
+            string query = "addClient"; // Nombre del procedimiento almacenado
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -413,7 +418,7 @@ namespace CineGt
         {
             double payment = 50 * numberSeats;
 
-            string query = "NewTicketsTransaction"; // Nombre del procedimiento almacenado
+            string query = "startTicket"; // Nombre del procedimiento almacenado
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -447,7 +452,7 @@ namespace CineGt
         }
         public void closeTicketTransaction(int idTicketTransaction, int idMovieSession)
         {
-            string query = "CloseTicketsTransaction"; // Nombre del procedimiento almacenado
+            string query = "closeTicket"; // Nombre del procedimiento almacenado
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -470,7 +475,7 @@ namespace CineGt
         }
         public void buyTickes(string json)
         {
-            string query = "BuyTickets"; // Nombre del procedimiento almacenado
+            string query = "confirmTicket"; // Nombre del procedimiento almacenado
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -492,7 +497,7 @@ namespace CineGt
         }
         public void cancelTicketTransaction(int idTicketTransaction)
         {
-            string query = "CancelTicketsTransaction"; // Nombre del procedimiento almacenado
+            string query = "cancelTicket"; // Nombre del procedimiento almacenado
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -515,7 +520,7 @@ namespace CineGt
         public List<SearchTransactionByClient> llenarDGcancelTransaction(string email)
         {
             List<SearchTransactionByClient> list = new List<SearchTransactionByClient>();
-            string query = "SearchTransactionByClient";
+            string query = "ClientByTransaction";
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -649,6 +654,124 @@ namespace CineGt
                 throw new Exception(ex.Message);
             }
         }
+        public List<GetRoomOccupancyByMonth> llenarDGGetRoomOccupancyByMonth(int room)
+        {
+            List<GetRoomOccupancyByMonth> list = new List<GetRoomOccupancyByMonth>();
+            string query = "GetRoomOccupancyByMonth"; // Nombre del procedimiento almacenado
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        conn.Open();
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.Add(new SqlParameter("@RoomID", SqlDbType.Int)).Value = room;
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            GetRoomOccupancyByMonth transaction = new GetRoomOccupancyByMonth
+                            {
+                                year = reader.GetFieldValue<int>(0),
+                                Month = reader.GetFieldValue<int>(1),
+                                avgSeatsOccupied = reader.GetFieldValue<decimal>(2),
+                                sessionCount = reader.GetFieldValue<int>(3)
+                            };
+                            list.Add(transaction);
+                        }
+                        reader.Close();
+                        conn.Close();
+                    }
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public List<GetLowOccupancySessions> llenarDGGetLowOccupancySessions(decimal percentage)
+        {
+            List<GetLowOccupancySessions> list = new List<GetLowOccupancySessions>();
+            string query = "GetLowOccupancySessions"; // Nombre del procedimiento almacenado
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        conn.Open();
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.Add(new SqlParameter("@PercentageThreshold", SqlDbType.Decimal)).Value = percentage;
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            GetLowOccupancySessions transaction = new GetLowOccupancySessions
+                            {
+                                id = reader.GetFieldValue<int>(0),
+                                beginningDate = reader.GetFieldValue<DateTime>(1),
+                                endingDate = reader.GetFieldValue<DateTime>(2),
+                                movie = reader.GetFieldValue<int>(3),
+                                room = reader.GetFieldValue<int>(4),
+                                soldSeats = reader.GetFieldValue<int>(5),
+                                OccupancyRate = reader.GetFieldValue<decimal>(6)
+                            };
+                            list.Add(transaction);
+                        }
+                        reader.Close();
+                        conn.Close();
+                    }
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public List<GetTop5Movies> llenarDGGetTop5Movies()
+        {
+            List<GetTop5Movies> list = new List<GetTop5Movies>();
+            string query = "GetTop5Movies"; // Nombre del procedimiento almacenado
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        conn.Open();
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            GetTop5Movies transaction = new GetTop5Movies
+                            {
+                                movieName = reader.GetFieldValue<string>(0),
+                                avgSeatSoldPerSession = reader.GetFieldValue<Decimal>(1)
+                            };
+                            list.Add(transaction);
+                        }
+                        reader.Close();
+                        conn.Close();
+                    }
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
 
         public class movieSession
         {
@@ -660,12 +783,13 @@ namespace CineGt
         }
         public class changeSeat
         {
-            public int transactionId {  get; set; }
+            public int transactionId { get; set; }
             public int movieSessionId { get; set; }
             public DateTime transactionCreateDate { get; set; }
             public DateTime? transactionModificationDate { get; set; }
             public string seat { get; set; }
             public string movieName { get; set; }
+            public int idRoom { get; set; }
         }
         public class Seat
         {
@@ -740,7 +864,27 @@ namespace CineGt
             public string MovieName { get; set; }
             public int RoomID { get; set; }
         }
-
-
+        public class GetRoomOccupancyByMonth
+        {
+            public int year { get; set; }
+            public int Month { get; set; }
+            public decimal avgSeatsOccupied { get; set; }
+            public int sessionCount { get; set; }
+        }
+        public class GetLowOccupancySessions
+        {
+            public int id { get; set; }
+            public DateTime beginningDate { get; set; }
+            public DateTime endingDate { get; set; }
+            public int movie { get; set; }
+            public int room { get; set; }
+            public int soldSeats { get; set; }
+            public decimal OccupancyRate { get; set; }
+        }
+        public class GetTop5Movies
+        {
+            public string movieName { get; set; }
+            public decimal avgSeatSoldPerSession { get; set; }
+        }
     }
 }

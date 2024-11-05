@@ -71,6 +71,7 @@
             linkLabel11.TabIndex = 51;
             linkLabel11.TabStop = true;
             linkLabel11.Text = "GetTop5Movies";
+            linkLabel11.LinkClicked += linkLabel11_LinkClicked;
             // 
             // linkLabel10
             // 
@@ -84,6 +85,7 @@
             linkLabel10.TabIndex = 50;
             linkLabel10.TabStop = true;
             linkLabel10.Text = "GetLowOccupancySessions";
+            linkLabel10.LinkClicked += linkLabel10_LinkClicked;
             // 
             // linkLabel9
             // 
@@ -111,6 +113,7 @@
             linkLabel7.TabIndex = 48;
             linkLabel7.TabStop = true;
             linkLabel7.Text = "GetRoomOccupancyByMonth";
+            linkLabel7.LinkClicked += linkLabel7_LinkClicked;
             // 
             // label7
             // 

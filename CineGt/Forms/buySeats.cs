@@ -20,9 +20,9 @@ namespace CineGt.Forms
         DBCineGt db;
         string Username;
 
-        int IdTransaction, IdMovieSession, numSeats;
+        int IdTransaction, IdMovieSession, numSeats, Room;
 
-        public buySeats(int idTransaction, int idMovieSession, int numberSeats, string username)
+        public buySeats(int idTransaction, int idMovieSession, int numberSeats, string username, int room)
         {
             InitializeComponent();
             db = new DBCineGt();
@@ -34,6 +34,7 @@ namespace CineGt.Forms
             IdTransaction = idTransaction;
             IdMovieSession = idMovieSession;
             numSeats = numberSeats;
+            Room = room;
             label6.Text = idTransaction.ToString();
             label7.Text = idMovieSession.ToString();
             label8.Text = numberSeats.ToString();
@@ -137,7 +138,8 @@ namespace CineGt.Forms
             {
                 TicketsTransaction = IdTransaction,
                 MovieSession = IdMovieSession,
-                Seat = asiento
+                Seat = asiento,
+                Room = Room
             }).ToList();
 
             // Convertir la lista a JSON

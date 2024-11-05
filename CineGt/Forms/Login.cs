@@ -59,7 +59,12 @@ namespace CineGt.Forms
                     }
                     else
                     {
-                        //deplegar employeeView
+                        EmployeeView adminForm = new EmployeeView(username);
+                        adminForm.Show();
+
+                        this.Hide();
+
+                        adminForm.FormClosed += (s, args) => Application.Exit();
                     }
                 }
             }

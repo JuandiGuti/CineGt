@@ -23,7 +23,9 @@ namespace CineGt.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string name = textBox1.Text;
+            try
+            {
+                string name = textBox1.Text;
             string email = textBox2.Text;
             string phone = textBox3.Text;
             int age = int.Parse(comboBox1.Text);
@@ -39,8 +41,7 @@ namespace CineGt.Forms
                 MessageBox.Show("Please enter a valid phone number in the format ex. +50265328954.");
                 return;
             }
-            try
-            {
+
                 db.newClient(name, email, phone, age);
                 MessageBox.Show("Client data saved successfully!");
                 this.Close();

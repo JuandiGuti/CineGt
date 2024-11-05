@@ -77,8 +77,9 @@ namespace CineGt.Forms
                 int idTransaction = int.Parse(selectedRow.Cells[0].Value.ToString());
                 int idSession = int.Parse(selectedRow.Cells[1].Value.ToString());
                 string actualSeat = selectedRow.Cells[4].Value.ToString();
+                int room = int.Parse(selectedRow.Cells[6].Value.ToString());
 
-                deploySeats deploySeats = new deploySeats(idTransaction, idSession, actualSeat);
+                deploySeats deploySeats = new deploySeats(idTransaction, idSession, actualSeat, room);
                 deploySeats.ShowDialog();
 
                 this.Hide();

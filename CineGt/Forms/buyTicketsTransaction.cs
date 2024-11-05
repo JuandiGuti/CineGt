@@ -86,11 +86,12 @@ namespace CineGt.Forms
             }
             DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
             idMovieSession = int.Parse(selectedRow.Cells[0].Value.ToString());
+            int room = int.Parse(selectedRow.Cells[3].Value.ToString());
             try
             {
                 int idTransaction = db.newTicketTransaction(email, Username, numberSeats, idMovieSession);
                 
-                buySeats buySeats = new buySeats(idTransaction, idMovieSession, numberSeats, Username);
+                buySeats buySeats = new buySeats(idTransaction, idMovieSession, numberSeats, Username, room);
                 buySeats.ShowDialog();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }

@@ -11,10 +11,10 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace CineGt.Forms
 {
-    public partial class AdminView : Form
+    public partial class EmployeeView : Form
     {
         public String Username;
-        public AdminView(String username)
+        public EmployeeView(String username)
         {
             InitializeComponent();
             label2.Text = label2.Text + username;
@@ -42,7 +42,7 @@ namespace CineGt.Forms
 
         }
 
-        private void AdminView_Load(object sender, EventArgs e)
+        private void EmployeeView_Load(object sender, EventArgs e)
         {
 
         }
