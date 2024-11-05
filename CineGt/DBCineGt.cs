@@ -561,7 +561,7 @@ namespace CineGt
         public List<GetOccupiedSeatsBySession> llenarDGGetOccupiedSeatsBySession(DateTime startDate, DateTime endDate)
         {
             List<GetOccupiedSeatsBySession> list = new List<GetOccupiedSeatsBySession>();
-            string query = "GetOccupiedSeatsBySession";
+            string query = "rangeDateSeatsBySession";
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -606,7 +606,7 @@ namespace CineGt
         public List<ListTicketTransactions> llenarDGListTicketTransactionsByDateRange(DateTime startDate, DateTime endDate)
         {
             List<ListTicketTransactions> list = new List<ListTicketTransactions>();
-            string query = "ListTicketTransactions"; // Nombre del procedimiento almacenado
+            string query = "listTicketTransactionByDate"; // Nombre del procedimiento almacenado
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -657,7 +657,7 @@ namespace CineGt
         public List<GetRoomOccupancyByMonth> llenarDGGetRoomOccupancyByMonth(int room)
         {
             List<GetRoomOccupancyByMonth> list = new List<GetRoomOccupancyByMonth>();
-            string query = "GetRoomOccupancyByMonth"; // Nombre del procedimiento almacenado
+            string query = "roomOccupancyBy3Month"; // Nombre del procedimiento almacenado
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -696,7 +696,7 @@ namespace CineGt
         public List<GetLowOccupancySessions> llenarDGGetLowOccupancySessions(decimal percentage)
         {
             List<GetLowOccupancySessions> list = new List<GetLowOccupancySessions>();
-            string query = "GetLowOccupancySessions"; // Nombre del procedimiento almacenado
+            string query = "lowOccupancySessions"; // Nombre del procedimiento almacenado
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -738,7 +738,7 @@ namespace CineGt
         public List<GetTop5Movies> llenarDGGetTop5Movies()
         {
             List<GetTop5Movies> list = new List<GetTop5Movies>();
-            string query = "GetTop5Movies"; // Nombre del procedimiento almacenado
+            string query = "top5Movies"; // Nombre del procedimiento almacenado
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))

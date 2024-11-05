@@ -53,7 +53,7 @@ namespace CineGt.Forms
                 }
                 else
                 {
-                    throw new Exception("Select a room.");
+                    throw new Exception("Select a percentage.");
                 }
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
