@@ -20,7 +20,7 @@ namespace CineGt.Forms
             db = new DBCineGt();
             dataGridView1.DataSource = null;
             ConfigurarDataGridView();
-            var listaAsientos = db.ObtenerAsientos(6);
+            var listaAsientos = db.ObtenerAsientos(idSession);
             db.LlenarDataGridViewConAsientos(dataGridView1, listaAsientos);
             label6.Text = idTransaction.ToString();
             label7.Text = idSession.ToString();
