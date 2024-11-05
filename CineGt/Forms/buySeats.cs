@@ -29,7 +29,7 @@ namespace CineGt.Forms
             Username = username;
             dataGridView1.DataSource = null;
             ConfigurarDataGridView();
-            var listaAsientos = db.ObtenerAsientos(6);
+            var listaAsientos = db.ObtenerAsientos(idMovieSession);
             db.LlenarDataGridViewConAsientos(dataGridView1, listaAsientos);
             IdTransaction = idTransaction;
             IdMovieSession = idMovieSession;
@@ -152,11 +152,11 @@ namespace CineGt.Forms
                 db.buyTickes(json);
                 if (numSeats > 1)
                 {
-                    MessageBox.Show("The tickets were bought successfully.");
+                    MessageBox.Show("The tickets were bought successfully.", "Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    MessageBox.Show("The ticket was bought successfully.");
+                    MessageBox.Show("The ticket was bought successfully.", "Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 this.Close();
             }

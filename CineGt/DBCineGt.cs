@@ -17,7 +17,7 @@ namespace CineGt
 {
     internal class DBCineGt
     {
-        private string connectionString = "Data Source=LAPTOP-E3AMJ72E\\SQLEXPRESS;Initial Catalog=CineGt;User=CineGtAppUser;Password=CineGtAppUser;";
+        private string connectionString = "Data Source=192.168.0.1\\SQLEXPRESS;Initial Catalog=CineGt;User=CineGtAppUser;Password=CineGtAppUser;";
         public bool Ok()
         {
             try
@@ -490,6 +490,165 @@ namespace CineGt
                 throw new Exception(ex.Message);
             }
         }
+        public void cancelTicketTransaction(int idTicketTransaction)
+        {
+            string query = "CancelTicketsTransaction"; // Nombre del procedimiento almacenado
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.Add(new SqlParameter("@TICKETSTRANSACTIONID", SqlDbType.Int)).Value = idTicketTransaction;
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public List<SearchTransactionByClient> llenarDGcancelTransaction(string email)
+        {
+            List<SearchTransactionByClient> list = new List<SearchTransactionByClient>();
+            string query = "SearchTransactionByClient";
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        conn.Open();
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.Add(new SqlParameter("@EMAIL", SqlDbType.VarChar, 50)).Value = email;
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            SearchTransactionByClient cl = new SearchTransactionByClient();
+                            cl.idTicketTransaction = reader.GetFieldValue<int>(0);
+                            cl.createDate = reader.GetFieldValue<DateTime>(1);
+                            cl.modDate = reader.IsDBNull(2) ? (DateTime?)null : reader.GetDateTime(3);
+                            cl.paymet = reader.GetFieldValue<decimal>(3);
+                            cl.numseat = reader.GetFieldValue<int>(4);
+                            cl.BeginningDateSession = reader.GetFieldValue<DateTime>(5);
+                            cl.movieName = reader.GetFieldValue<string>(6);
+                            cl.idMovieSession = reader.GetFieldValue<int>(7);
+                            list.Add(cl);
+                        }
+                        reader.Close();
+                        conn.Close();
+                    }
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public List<GetOccupiedSeatsBySession> llenarDGGetOccupiedSeatsBySession(DateTime startDate, DateTime endDate)
+        {
+            List<GetOccupiedSeatsBySession> list = new List<GetOccupiedSeatsBySession>();
+            string query = "GetOccupiedSeatsBySession";
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        conn.Open();
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.Add(new SqlParameter("@StartDate", SqlDbType.DateTime)).Value = startDate;
+                        cmd.Parameters.Add(new SqlParameter("@EndDate", SqlDbType.DateTime)).Value = endDate;
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            GetOccupiedSeatsBySession cl = new GetOccupiedSeatsBySession
+                            {
+                                idMovieSession = reader.GetFieldValue<int>(0),
+                                sessionState = reader.GetFieldValue<int>(1),
+                                beginningDate = reader.GetFieldValue<DateTime>(2),
+                                endingDate = reader.GetFieldValue<DateTime>(3),
+                                compromisedSeats = reader.GetFieldValue<int>(4),
+                                idMovie = reader.GetFieldValue<int>(5),
+                                room = reader.GetFieldValue<int>(6),
+                                appUser = reader.GetFieldValue<string>(7),
+                                occupiedSeats = reader.GetFieldValue<int>(8)
+                            };
+                            list.Add(cl);
+                        }
+                        reader.Close();
+                        conn.Close();
+                    }
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public List<ListTicketTransactions> llenarDGListTicketTransactionsByDateRange(DateTime startDate, DateTime endDate)
+        {
+            List<ListTicketTransactions> list = new List<ListTicketTransactions>();
+            string query = "ListTicketTransactions"; // Nombre del procedimiento almacenado
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        conn.Open();
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.Add(new SqlParameter("@StartDate", SqlDbType.DateTime)).Value = startDate;
+                        cmd.Parameters.Add(new SqlParameter("@EndDate", SqlDbType.DateTime)).Value = endDate;
+
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            ListTicketTransactions transaction = new ListTicketTransactions
+                            {
+                                TransactionID = reader.GetFieldValue<int>(0),
+                                TransactionStatus = reader.GetFieldValue<int>(1),
+                                PurchaseDate = reader.GetFieldValue<DateTime>(2),
+                                ModificationDate = reader.IsDBNull(3) ? (DateTime?)null : reader.GetFieldValue<DateTime>(3),
+                                Payment = reader.GetFieldValue<decimal>(4),
+                                ClientName = reader.GetFieldValue<string>(5),
+                                Email = reader.GetFieldValue<string>(6),
+                                Phone = reader.GetFieldValue<string>(7),
+                                TotalSeats = reader.GetFieldValue<int>(8),
+                                MovieSessionID = reader.GetFieldValue<int>(9),
+                                SessionState = reader.GetFieldValue<int>(10),
+                                BeginningDate = reader.GetFieldValue<DateTime>(11),
+                                EndingDate = reader.GetFieldValue<DateTime>(12),
+                                MovieName = reader.GetFieldValue<string>(13),
+                                RoomID = reader.GetFieldValue<int>(14)
+                            };
+                            list.Add(transaction);
+                        }
+                        reader.Close();
+                        conn.Close();
+                    }
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
         public class movieSession
         {
@@ -499,7 +658,7 @@ namespace CineGt
             public int room { get; set; }
             public string movieName { get; set; }
         }
-        public class changeSeat()
+        public class changeSeat
         {
             public int transactionId {  get; set; }
             public int movieSessionId { get; set; }
@@ -525,6 +684,63 @@ namespace CineGt
             public string movieName { get; set; }
             public int availableSeats { get; set; }
         }
+        public class SearchTransactionByClient
+        {
+            public int idTicketTransaction { get; set; }
+            public DateTime createDate { get; set; }
+            public DateTime? modDate { get; set; }
+            public decimal paymet { get; set; }
+            public int numseat { get; set; }
+            public DateTime BeginningDateSession { get; set; }
+            public string movieName { get; set; }
+            public int idMovieSession { get; set; }
+        }
+        public class GetOccupiedSeatsBySession
+        {
+            public int idMovieSession { get; set; }
+            public int sessionState { get; set; }
+            public DateTime beginningDate { get; set; }
+            public DateTime endingDate { get; set; }
+            public int compromisedSeats { get; set; }
+            public int idMovie { get; set; }
+            public int room { get; set; }
+            public string appUser { get; set; }
+            public int occupiedSeats { get; set; }
+        }
+        public class GetTransactionDetailsByDateRange
+        {
+            public int ID { get; set; }
+            public int TransactionStatus { get; set; }
+            public DateTime CreateDate { get; set; }
+            public DateTime? ModificationDate { get; set; } // Nullable in case it might be null
+            public decimal Payment { get; set; }
+            public int Client { get; set; }
+            public string AppUser { get; set; }
+            public int NumberSeats { get; set; }
+            public int Movie { get; set; }
+            public int Room { get; set; }
+            public DateTime BeginningDate { get; set; }
+            public DateTime EndingDate { get; set; }
+        }
+        public class ListTicketTransactions
+        {
+            public int TransactionID { get; set; }
+            public int TransactionStatus { get; set; }
+            public DateTime PurchaseDate { get; set; }
+            public DateTime? ModificationDate { get; set; } // Nullable in case it might be null
+            public decimal Payment { get; set; }
+            public string ClientName { get; set; }
+            public string Email { get; set; }
+            public string Phone { get; set; }
+            public int TotalSeats { get; set; }
+            public int MovieSessionID { get; set; }
+            public int SessionState { get; set; }
+            public DateTime BeginningDate { get; set; }
+            public DateTime EndingDate { get; set; }
+            public string MovieName { get; set; }
+            public int RoomID { get; set; }
+        }
+
 
     }
 }

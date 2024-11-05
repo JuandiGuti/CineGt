@@ -1,6 +1,6 @@
 ﻿namespace CineGt.Forms
 {
-    partial class CancelSession
+    partial class report1
     {
         /// <summary>
         /// Required designer variable.
@@ -38,6 +38,10 @@
             label3 = new Label();
             pictureBox2 = new PictureBox();
             dataGridView1 = new DataGridView();
+            dateTimePicker1 = new DateTimePicker();
+            dateTimePicker2 = new DateTimePicker();
+            label2 = new Label();
+            label4 = new Label();
             button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -73,12 +77,12 @@
             button3.TabIndex = 4;
             button3.Text = "Back";
             button3.UseVisualStyleBackColor = true;
-            button3.Click += this.button3_Click;
+            button3.Click += button3_Click;
             // 
             // pictureBox3
             // 
             pictureBox3.BackColor = Color.White;
-            pictureBox3.Location = new Point(113, 128);
+            pictureBox3.Location = new Point(113, 187);
             pictureBox3.Name = "pictureBox3";
             pictureBox3.Size = new Size(778, 5);
             pictureBox3.TabIndex = 21;
@@ -87,11 +91,11 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(113, 106);
+            label3.Location = new Point(113, 120);
             label3.Name = "label3";
-            label3.Size = new Size(499, 19);
+            label3.Size = new Size(215, 19);
             label3.TabIndex = 20;
-            label3.Text = "Select the movie session to cancel (only inactive ones in the future):";
+            label3.Text = "GetOccupiedSeatsBySession";
             // 
             // pictureBox2
             // 
@@ -128,7 +132,7 @@
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
             dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
             dataGridView1.GridColor = Color.White;
-            dataGridView1.Location = new Point(113, 148);
+            dataGridView1.Location = new Point(113, 198);
             dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
@@ -142,23 +146,69 @@
             dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(778, 382);
+            dataGridView1.Size = new Size(778, 381);
             dataGridView1.TabIndex = 22;
-            dataGridView1.CellContentClick += this.dataGridView1_CellContentClick;
+            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            // 
+            // dateTimePicker1
+            // 
+            dateTimePicker1.CalendarFont = new Font("Bahnschrift", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dateTimePicker1.CalendarForeColor = Color.FromArgb(64, 64, 64);
+            dateTimePicker1.CalendarTitleForeColor = Color.FromArgb(64, 64, 64);
+            dateTimePicker1.CustomFormat = "";
+            dateTimePicker1.DropDownAlign = LeftRightAlignment.Right;
+            dateTimePicker1.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dateTimePicker1.Format = DateTimePickerFormat.Custom;
+            dateTimePicker1.Location = new Point(610, 113);
+            dateTimePicker1.Name = "dateTimePicker1";
+            dateTimePicker1.Size = new Size(281, 26);
+            dateTimePicker1.TabIndex = 39;
+            // 
+            // dateTimePicker2
+            // 
+            dateTimePicker2.CalendarFont = new Font("Bahnschrift", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dateTimePicker2.CalendarForeColor = Color.FromArgb(64, 64, 64);
+            dateTimePicker2.CalendarTitleForeColor = Color.FromArgb(64, 64, 64);
+            dateTimePicker2.CustomFormat = "";
+            dateTimePicker2.DropDownAlign = LeftRightAlignment.Right;
+            dateTimePicker2.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dateTimePicker2.Format = DateTimePickerFormat.Custom;
+            dateTimePicker2.Location = new Point(610, 145);
+            dateTimePicker2.Name = "dateTimePicker2";
+            dateTimePicker2.Size = new Size(281, 26);
+            dateTimePicker2.TabIndex = 40;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(517, 118);
+            label2.Name = "label2";
+            label2.Size = new Size(87, 19);
+            label2.TabIndex = 41;
+            label2.Text = "Start Date:";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(517, 150);
+            label4.Name = "label4";
+            label4.Size = new Size(79, 19);
+            label4.TabIndex = 42;
+            label4.Text = "End Date:";
             // 
             // button1
             // 
-            button1.Font = new Font("Bahnschrift", 15F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            button1.Font = new Font("Bahnschrift", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             button1.ForeColor = Color.FromArgb(64, 64, 64);
-            button1.Location = new Point(402, 556);
+            button1.Location = new Point(113, 146);
             button1.Name = "button1";
-            button1.Size = new Size(200, 40);
-            button1.TabIndex = 23;
-            button1.Text = "Cancel Session";
+            button1.Size = new Size(106, 27);
+            button1.TabIndex = 43;
+            button1.Text = "Display";
             button1.UseVisualStyleBackColor = true;
-            button1.Click += this.button1_Click;
+            button1.Click += button1_Click_1;
             // 
-            // CancelSession
+            // report1
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -167,6 +217,10 @@
             ClientSize = new Size(1004, 681);
             ControlBox = false;
             Controls.Add(button1);
+            Controls.Add(label4);
+            Controls.Add(label2);
+            Controls.Add(dateTimePicker2);
+            Controls.Add(dateTimePicker1);
             Controls.Add(dataGridView1);
             Controls.Add(pictureBox3);
             Controls.Add(label3);
@@ -178,10 +232,10 @@
             ForeColor = Color.White;
             FormBorderStyle = FormBorderStyle.Fixed3D;
             Margin = new Padding(4);
-            Name = "CancelSession";
+            Name = "report1";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "CancelSession";
-            Load += this.CancelSession_Load;
+            Text = "report1";
+            Load += report1_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
@@ -199,6 +253,10 @@
         private Label label3;
         private PictureBox pictureBox2;
         private DataGridView dataGridView1;
+        private DateTimePicker dateTimePicker1;
+        private DateTimePicker dateTimePicker2;
+        private Label label2;
+        private Label label4;
         private Button button1;
     }
 }
