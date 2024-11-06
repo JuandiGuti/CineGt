@@ -90,7 +90,6 @@
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(300, 32);
             textBox1.TabIndex = 6;
-            textBox1.Text = "Admin";
             // 
             // textBox2
             // 
@@ -100,7 +99,6 @@
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(300, 32);
             textBox2.TabIndex = 7;
-            textBox2.Text = "Gutierrez1$";
             // 
             // button2
             // 

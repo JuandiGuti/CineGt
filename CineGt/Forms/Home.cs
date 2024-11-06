@@ -18,14 +18,6 @@ namespace CineGt.Forms
         {
             InitializeComponent();
             db = new DBCineGt();
-            if (db.Ok())
-            {
-                MessageBox.Show("Conectao");
-            }
-            else
-            {
-                MessageBox.Show("Nelson");
-            }
         }
 
         private void button3_Click(object sender, EventArgs e)
