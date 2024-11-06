@@ -162,7 +162,28 @@ namespace CineGt.Forms
                 }
                 this.Close();
             }
-            catch(Exception ex) 
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                db.autoBuyTickets(numSeats, IdTransaction, IdMovieSession);
+                if (numSeats > 1)
+                {
+                    MessageBox.Show("The tickets were bought successfully.", "Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("The ticket was bought successfully.", "Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                this.Close();
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }

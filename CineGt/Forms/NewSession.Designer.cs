@@ -42,6 +42,7 @@
             comboBox2 = new ComboBox();
             dateTimePicker1 = new DateTimePicker();
             button1 = new Button();
+            button2 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
@@ -188,6 +189,18 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
+            // button2
+            // 
+            button2.Font = new Font("Bahnschrift", 15F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            button2.ForeColor = Color.FromArgb(64, 64, 64);
+            button2.Location = new Point(23, 619);
+            button2.Name = "button2";
+            button2.Size = new Size(200, 40);
+            button2.TabIndex = 40;
+            button2.Text = "Add by .CSV";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
             // NewSession
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
@@ -196,6 +209,7 @@
             BackColor = Color.FromArgb(64, 64, 64);
             ClientSize = new Size(1004, 681);
             ControlBox = false;
+            Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(dateTimePicker1);
             Controls.Add(comboBox2);
@@ -243,5 +257,6 @@
         private ComboBox comboBox2;
         private DateTimePicker dateTimePicker1;
         private Button button1;
+        private Button button2;
     }
 }

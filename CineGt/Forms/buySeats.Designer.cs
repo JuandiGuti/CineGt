@@ -46,6 +46,7 @@
             label6 = new Label();
             label7 = new Label();
             label8 = new Label();
+            button3 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
@@ -230,6 +231,18 @@
             label8.TabIndex = 40;
             label8.Text = "label8";
             // 
+            // button3
+            // 
+            button3.Font = new Font("Bahnschrift", 15F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            button3.ForeColor = Color.FromArgb(64, 64, 64);
+            button3.Location = new Point(24, 397);
+            button3.Name = "button3";
+            button3.Size = new Size(200, 40);
+            button3.TabIndex = 41;
+            button3.Text = "Auto Buy tickets";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click_1;
+            // 
             // buySeats
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
@@ -238,6 +251,7 @@
             BackColor = Color.FromArgb(64, 64, 64);
             ClientSize = new Size(1004, 681);
             ControlBox = false;
+            Controls.Add(button3);
             Controls.Add(label8);
             Controls.Add(label7);
             Controls.Add(label6);
@@ -288,5 +302,6 @@
         private Label label6;
         private Label label7;
         private Label label8;
+        private Button button3;
     }
 }

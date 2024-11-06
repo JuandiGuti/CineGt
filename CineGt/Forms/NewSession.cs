@@ -54,5 +54,12 @@ namespace CineGt.Forms
                 MessageBox.Show(ex.Message, "New Session Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            loadCSVsession loadCSVsession = new loadCSVsession();
+            loadCSVsession.ShowDialog();
+        }
+
     }
 }

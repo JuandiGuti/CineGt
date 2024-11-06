@@ -17,7 +17,7 @@ namespace CineGt
 {
     internal class DBCineGt
     {
-        private string connectionString = "Data Source=192.168.0.1\\SQLEXPRESS;Initial Catalog=BuenaCineGt;User=CineGtAppUser;Password=CineGtAppUser;";
+        private string connectionString = "Data Source=LOCALHOST\\SQLEXPRESS;Initial Catalog=BuenaCineGt;User=CineGtAppUser;Password=CineGtAppUser;";
         public bool Ok()
         {
             try
@@ -770,8 +770,53 @@ namespace CineGt
                 throw new Exception(ex.Message);
             }
         }
+        public void autoBuyTickets(int numberSeats, int transactionId, int sessionId)
+        {
+            string query = "confirmAutoTickets"; // Nombre del procedimiento almacenado
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
 
+                    cmd.Parameters.Add(new SqlParameter("@NUMSEATS", SqlDbType.Int)).Value = numberSeats;
+                    cmd.Parameters.Add(new SqlParameter("@TRANSACTIONID", SqlDbType.Int)).Value = transactionId;
+                    cmd.Parameters.Add(new SqlParameter("@SESSIONID", SqlDbType.Int)).Value = sessionId;
 
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public void ProcessSessionsFromCSV(string CSVPath, int commitErrors)
+        {
+            string query = "ProcessSessionsFromCSV"; // Nombre del procedimiento almacenado
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.Add(new SqlParameter("@CSVPath", SqlDbType.NVarChar, 255)).Value = CSVPath;
+                    cmd.Parameters.Add(new SqlParameter("@CommitOnErrors", SqlDbType.Int)).Value = commitErrors;
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
         public class movieSession
         {
