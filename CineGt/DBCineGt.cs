@@ -17,7 +17,7 @@ namespace CineGt
 {
     internal class DBCineGt
     {
-        private string connectionString = "Data Source=LOCALHOST\\SQLEXPRESS;Initial Catalog=BuenaCineGt;User=CineGtAppUser;Password=CineGtAppUser;";
+        private string connectionString = "Data Source=192.168.0.1\\SQLEXPRESS;Initial Catalog=BuenaCineGt;User=CineGtAppUser;Password=CineGtAppUser;";
         public bool Ok()
         {
             try
