@@ -1,0 +1,1 @@
+SELECT MS.ID AS SessionId, MS.BeginningDate, MS.EndingDate, M.MovieName, MS.Room FROM MovieSession MS, Movie M WHERE SessionState = 0  AND BeginningDate > GETDATE() AND MS.Movie = M.ID;
